@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>triangle_incircle</h1><!--introduction--><p>Function to compute and display the incircle of a triangle.</p><p>Author &amp; support : nicolas.douillet (at) free.fr, 2022.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">See also</a></li><li><a href="#4">Input arguments</a></li><li><a href="#5">Output arguments</a></li><li><a href="#6">Example #1</a></li><li><a href="#7">Example #2</a></li></ul></div><h2 id="1">Syntax</h2><p>triangle_incircle(A, B, C);</p><p>triangle_incircle(A, B, C, nb_samples);</p><p>triangle_incircle(A, B, C, nb_samples, option_display);</p><p>[R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display);</p><h2 id="2">Description</h2><p>triangle_incircle(A, B, C) computes and displays the incircle of ABC triangle.</p><p>triangle_incircle(A, B, C, nb_samples) uses nb_samples to draw the circle.</p><p>triangle_incircle(A, B, C, nb_samples, option_display) displays the circle when option_display is set either to logical true or real numeric 1, and doesn't when it is set to logical false or real numeric 0.</p><p>[R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display) stores the results in [R, I, r] vector.</p><h2 id="3">See also</h2><p>| <a href="https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk">tetrahedron_circumscribed sphere</a> |</p><h2 id="4">Input arguments</h2><pre>      [Ax]
+  </style></head><body><div class="content"><h1>triangle_incircle</h1><!--introduction--><p>Function to compute and display the incircle of a triangle.</p><p>Author &amp; support : nicolas.douillet (at) free.fr, 2022.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Syntax</a></li><li><a href="#2">Description</a></li><li><a href="#3">See also</a></li><li><a href="#4">Input arguments</a></li><li><a href="#5">Output arguments</a></li><li><a href="#6">Example #1</a></li><li><a href="#7">Example #2</a></li></ul></div><h2 id="1">Syntax</h2><p>triangle_incircle(A, B, C);</p><p>triangle_incircle(A, B, C, nb_samples);</p><p>triangle_incircle(A, B, C, nb_samples, option_display);</p><p>[R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display);</p><h2 id="2">Description</h2><p>triangle_incircle(A, B, C) computes and displays the incircle of ABC triangle.</p><p>triangle_incircle(A, B, C, nb_samples) uses nb_samples to draw the circle.</p><p>triangle_incircle(A, B, C, nb_samples, option_display) displays the circle when option_display is set either to logical true or real numeric 1, and doesn't when it is set to logical false or real numeric 0.</p><p>[R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display) stores the results in [R, I, r] vector.</p><h2 id="3">See also</h2><p>| <a href="https://fr.mathworks.com/matlabcentral/fileexchange/119788-triangle-circumcircle">triangle circumcircle</a> |   <a href="https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk">tetrahedron circumsphere</a> |</p><h2 id="4">Input arguments</h2><pre>      [Ax]
 - A = [Ay] : real column vector double. 2 &lt;= numel(A) &lt;= 3. One of the three ABC vertices.
       [Az]</pre><pre>      [Bx]
 - B = [By] real column vector double. 2 &lt;= numel(A) &lt;= 3. One of the three ABC vertices.
@@ -76,13 +76,13 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 - R = [- Ry -]: real matrix double. The incircle coordinates. size(R) = [size(A,1), nb_samples].
       [- Rz -]</pre><pre>      [Ix]
 - I = [Iy] : real column vector double. 2 &lt;= numel(I) &lt;= 3. The incircle centre.
-      [Iz]</pre><p>- r : real scalar double. the incircle radius.</p><h2 id="6">Example #1</h2><p>Triangle from the 3D space</p><pre class="codeinput">A = 2*(rand(3,1)-0.5);
+      [Iz]</pre><p>- r : real scalar double. the incircle radius.</p><h2 id="6">Example #1</h2><p>From a triangle of the 3D space</p><pre class="codeinput">A = 2*(rand(3,1)-0.5);
 B = 2*(rand(3,1)-0.5);
 C = 2*(rand(3,1)-0.5);
 nb_samples = 30;
 option_display = true;
 triangle_incircle(A,B,C,nb_samples,option_display);
-</pre><img vspace="5" hspace="5" src="doc_01.png" alt=""> <h2 id="7">Example #2</h2><p>Triangle from the 2D space</p><pre class="codeinput">A = 2*(rand(2,1)-0.5);
+</pre><img vspace="5" hspace="5" src="doc_01.png" alt=""> <h2 id="7">Example #2</h2><p>From a triangle of the 2D space</p><pre class="codeinput">A = 2*(rand(2,1)-0.5);
 B = 2*(rand(2,1)-0.5);
 C = 2*(rand(2,1)-0.5);
 [R,I,r] = triangle_incircle(A,B,C);
@@ -124,7 +124,8 @@ C = 2*(rand(2,1)-0.5);
 %
 %% See also
 %
-% | <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron_circumscribed sphere> |
+% | <https://fr.mathworks.com/matlabcentral/fileexchange/119788-triangle-circumcircle triangle circumcircle> |
+%   <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron circumsphere> |
 %
 %
 %% Input arguments
@@ -161,7 +162,7 @@ C = 2*(rand(2,1)-0.5);
 %
 %
 %% Example #1
-% Triangle from the 3D space
+% From a triangle of the 3D space
 A = 2*(rand(3,1)-0.5);
 B = 2*(rand(3,1)-0.5);
 C = 2*(rand(3,1)-0.5);
@@ -170,7 +171,7 @@ option_display = true;
 triangle_incircle(A,B,C,nb_samples,option_display);
 
 %% Example #2
-% Triangle from the 2D space
+% From a triangle of the 2D space
 A = 2*(rand(2,1)-0.5);
 B = 2*(rand(2,1)-0.5);
 C = 2*(rand(2,1)-0.5);

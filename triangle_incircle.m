@@ -20,7 +20,8 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 %
 % See also
 %
-% | <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron_circumscribed sphere> |
+% | <https://fr.mathworks.com/matlabcentral/fileexchange/119788-triangle-circumcircle triangle circumcircle> |
+% | <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron circumsphere> |
 %
 % Input arguments
 %
@@ -56,7 +57,7 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 %
 %
 % Example #1
-% Triangle from the 3D space
+% From a triangle of the 3D space
 % A = 2*(rand(3,1)-0.5);
 % B = 2*(rand(3,1)-0.5);
 % C = 2*(rand(3,1)-0.5);
@@ -65,7 +66,7 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 % triangle_incircle(A,B,C,nb_samples,option_display);
 %
 % Example #2
-% Triangle from the 2D space
+% From a triangle of the 2D space
 % A = 2*(rand(2,1)-0.5);
 % B = 2*(rand(2,1)-0.5);
 % C = 2*(rand(2,1)-0.5);
@@ -112,8 +113,8 @@ BC = (C-B)/norm(C-B);
 n = cross(AB,AC);
 
 % BAC, ABC, and ACB angles bissectrices computation
-A_midangle_vect =  0.5 * (AB + AC);
-B_midangle_vect =  0.5 * (BC - AB);
+A_midangle_vect = 0.5*(AB+AC);
+B_midangle_vect = 0.5*(BC-AB);
 
 % Circle centre I computation
 I = lines_intersection(A,A_midangle_vect,B,B_midangle_vect,true)';
@@ -142,7 +143,7 @@ if dimension > 2
     Rm = @(delta)[u(1,1)^2+cos(delta)*(1-u(1,1)^2) (1-cos(delta))*u(1,1)*u(2,1)-u(3,1)*sin(delta) (1-cos(delta))*u(1,1)*u(3,1)+u(2,1)*sin(delta);
                   (1-cos(delta))*u(1,1)*u(2,1)+u(3,1)*sin(delta) u(2,1)^2+cos(delta)*(1-u(2,1)^2) (1-cos(delta))*u(2,1)*u(3,1)-u(1,1)*sin(delta);
                   (1-cos(delta))*u(1,1)*u(3,1)-u(2,1)*sin(delta) (1-cos(delta))*u(2,1)*u(3,1)+u(1,1)*sin(delta) u(3,1)^2+cos(delta)*(1-u(3,1)^2)];
-    
+                  
     R = (Rm(alpha) * cat(1,Cx,Cy,Cz))' + I;
     
 else % if dimension == 2
