@@ -2,7 +2,7 @@
 %
 % Function to compute and display the incircle of a triangle.
 %
-% Author & support : nicolas.douillet (at) free.fr, 2022.
+% Author & support : nicolas.douillet (at) free.fr, 2022-2023.
 %
 %
 %% Syntax
@@ -35,6 +35,7 @@
 %% See also
 %
 % | <https://fr.mathworks.com/matlabcentral/fileexchange/119788-triangle-circumcircle triangle circumcircle> |
+%   <https://fr.mathworks.com/help/matlab/ref/triangulation.incenter.html incenter> |
 %   <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron circumsphere> |
 %
 %
@@ -82,7 +83,7 @@ triangle_incircle(A,B,C,nb_samples,option_display);
 
 %% Example #2
 % From a triangle of the 2D space
-A = 2*(rand(2,1)-0.5);
-B = 2*(rand(2,1)-0.5);
-C = 2*(rand(2,1)-0.5);
+A = cat(1,2*(rand(2,1)-0.5),0);
+B = cat(1,2*(rand(2,1)-0.5),0);
+C = cat(1,2*(rand(2,1)-0.5),0);
 [R,I,r] = triangle_incircle(A,B,C);

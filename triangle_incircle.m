@@ -1,7 +1,7 @@
 function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 %% triangle_incircle : function to compute and display the incircle of one given triangle
 %
-% Author & support : nicolas.douillet (at) free.fr, 2022.
+% Author & support : nicolas.douillet (at) free.fr, 2022-2023.
 %
 % Syntax
 %
@@ -18,10 +18,7 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 % logical true or real numeric 1, and doesn't when it is set to logical false or real numeric 0.
 % [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display) stores the results in [R, I, r] vector.
 %
-% See also
-%
-% | <https://fr.mathworks.com/matlabcentral/fileexchange/119788-triangle-circumcircle triangle circumcircle> |
-% | <https://fr.mathworks.com/matlabcentral/fileexchange/65574-tetrahedron-circumscribed-sphere?s_tid=prof_contriblnk tetrahedron circumsphere> |
+% See also INCENTER CIRCUMCENTER
 %
 % Input arguments
 %
@@ -56,7 +53,7 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 % - r : real scalar double. the incircle radius.
 %
 %
-% Example #1
+% Example
 % From a triangle of the 3D space
 % A = 2*(rand(3,1)-0.5);
 % B = 2*(rand(3,1)-0.5);
@@ -67,9 +64,9 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 %
 % Example #2
 % From a triangle of the 2D space
-% A = 2*(rand(2,1)-0.5);
-% B = 2*(rand(2,1)-0.5);
-% C = 2*(rand(2,1)-0.5);
+% A = cat(1,2*(rand(2,1)-0.5),0);
+% B = cat(1,2*(rand(2,1)-0.5),0);
+% C = cat(1,2*(rand(2,1)-0.5),0);
 % [R,I,r] = triangle_incircle(A,B,C);
 
 
@@ -92,19 +89,10 @@ end
 assert(isequal(size(A),size(B),size(C)),'All inputs points must have the same size.');
 assert(isequal(ndims(A),ndims(B),ndims(C),2),'All inputs points must have the same number of dimensions (2).');
 assert(isreal(A) && isreal(B) && isreal(C),'All inputs points must contain real numbers only.');
-
-dimension = numel(A);
-assert(dimension > 1 && dimension < 4,'Input points must have 2 or 3 elements.');
+assert(numel(A) > 1 && numel(A) < 4,'Input points must have 2 or 3 elements.');
 
 
 %% Body
-if dimension < 3 % one padding in 2D case    
-    
-    A = cat(1,A,1);
-    B = cat(1,B,1);
-    C = cat(1,C,1);
-    
-end
 
 % ABC triangle director and normal vectors computation 
 AB = (B-A)/norm(B-A);
@@ -130,10 +118,13 @@ Cx = r*cos(theta);
 Cy = r*sin(theta);
 Cz = zeros(1,nb_samples);
 
-if dimension > 2
+
+% Vector u to rotate around
+k = [0 0 1]';
+
+
+if norm(cross(k,n)) > 1e3*eps
     
-    % Vector u to rotate around
-    k = [0 0 1]';
     u = cross(k,n)/norm(cross(k,n));
     
     % Angle between k and u
@@ -143,16 +134,12 @@ if dimension > 2
     Rm = @(delta)[u(1,1)^2+cos(delta)*(1-u(1,1)^2) (1-cos(delta))*u(1,1)*u(2,1)-u(3,1)*sin(delta) (1-cos(delta))*u(1,1)*u(3,1)+u(2,1)*sin(delta);
                   (1-cos(delta))*u(1,1)*u(2,1)+u(3,1)*sin(delta) u(2,1)^2+cos(delta)*(1-u(2,1)^2) (1-cos(delta))*u(2,1)*u(3,1)-u(1,1)*sin(delta);
                   (1-cos(delta))*u(1,1)*u(3,1)-u(2,1)*sin(delta) (1-cos(delta))*u(2,1)*u(3,1)+u(1,1)*sin(delta) u(3,1)^2+cos(delta)*(1-u(3,1)^2)];
-                  
+    
     R = (Rm(alpha) * cat(1,Cx,Cy,Cz))' + I;
     
-else % if dimension == 2
+else
     
     R = cat(1,Cx,Cy,Cz)' + I;
-    
-    % one simplifications in 2D case
-    R = R(:,1:2); 
-    I = I(1:2);
     
 end
 
@@ -160,23 +147,13 @@ end
 %% Display
 if option_display
     
-    figure    
+    figure
     
-    if dimension > 2
-        
-        line([A(1,1) B(1,1) C(1,1) A(1,1)],[A(2,1) B(2,1) C(2,1) A(2,1)],[A(3,1) B(3,1) C(3,1) A(3,1)],'Color',[1 0 0],'Linewidth',2), hold on;
-        line([R(:,1); R(1,1)],[R(:,2); R(1,2)],[R(:,3); R(1,3)],'Color',[0 0 1],'Linewidth',2), hold on;    
-        view(3);
+    line([A(1,1) B(1,1) C(1,1) A(1,1)],[A(2,1) B(2,1) C(2,1) A(2,1)],[A(3,1) B(3,1) C(3,1) A(3,1)],'Color',[1 0 0],'Linewidth',2), hold on;
+    line([R(:,1); R(1,1)],[R(:,2); R(1,2)],[R(:,3); R(1,3)],'Color',[0 0 1],'Linewidth',2), hold on;
+    view(3);
     
-    else % if dimension == 2
-        
-        line([A(1,1) B(1,1) C(1,1) A(1,1)],[A(2,1) B(2,1) C(2,1) A(2,1)],'Color',[1 0 0],'Linewidth',2), hold on;
-        line([R(:,1); R(1,1)],[R(:,2); R(1,2)],'Color',[0 0 1],'Linewidth',2), hold on;    
-        view(2);
-        
-    end
-    
-    axis equal, axis tight;    
+    axis equal, axis tight;
     
 end
 
@@ -189,20 +166,6 @@ function [I, rc] = lines_intersection(M1, u1, M2, u2, verbose)
 %
 % Author & support : nicolas.douillet (at) free.fr, 2019-2022.
 
-% Zeros padding in 2D case
-s1 = size(u1);
-catdim = find(s1 == 1);
-cat2dim = setdiff(1:2,catdim);
-
-dimension = numel(u1);
-
-if dimension < 3
-    M1 = cat(cat2dim,M1,0);
-    u1 = cat(cat2dim,u1,0);
-    M2 = cat(cat2dim,M2,0);
-    u2 = cat(cat2dim,u2,0);
-end
-
 
 u1 = u1/norm(u1);
 u2 = u2/norm(u2);
@@ -212,9 +175,9 @@ nM1M2 = diff_pts/norm(diff_pts);
 
 
 % Segment cases
-if norm(v) < eps
+if norm(v) < 1e3*eps
     
-    if ~norm(cross(u1,nM1M2)) && ~norm(cross(u2,nM1M2))
+    if norm(cross(u1,nM1M2)) < 1e3*eps && norm(cross(u2,nM1M2)) < 1e3*eps
         
         I = M1;
         rc = 2;
@@ -238,17 +201,17 @@ else
     
     d = [-v(1) v(2) -v(3)];
     
-    f = find(abs(d) > eps);
+    f = find(abs(d) > 1e3*eps);
     if f; f = f(1,1); end
     
-    d_pts = diff_pts(setdiff(1:dimension,f));
-    dt = det(cat(catdim,d_pts,-u2(setdiff(1:dimension,f))));
-    du = det(cat(catdim,u1(setdiff(1:dimension,f)),d_pts));
+    d_pts = diff_pts(setdiff(1:3,f));
+    dt = det(cat(2,d_pts,-u2(setdiff(1:3,f))));
+    du = det(cat(2,u1(setdiff(1:3,f)),d_pts));
     
     t = dt/d(f);
     u = du/d(f);
-    
-    if abs(M1(f)+u1(f)*t-M2(f)-u2(f)*u) < min(abs(M1(f)+u1(f)*t),abs(M2(f)+u2(f)*u))
+            
+    if abs(M1(f)+u1(f)*t-M2(f)-u2(f)*u) < 1e3*eps(min(abs(M1(f)+u1(f)*t),abs(M2(f)+u2(f)*u)))
         
         I = zeros(size(M1));
         
@@ -282,15 +245,7 @@ function [d2H, H] = point_to_line_distance(P, u, I0)
 
 
 % Body
-% Zeros padding in 2D case
 nb_pts = size(P,1);
-dimension = size(P,2); 
-
-if dimension < 3
-    P = cat(2,P,zeros(size(P,1),1));
-    u = cat(2,u,0);
-    I0 = cat(2,I0,0);    
-end
 
 
 t_H = (u(1)*(P(:,1)-repmat(I0(1),[nb_pts,1])) + ...
@@ -304,7 +259,7 @@ z_H = I0(3) + t_H*u(3);
 
 
 % Orthogonal projected point
-H = zeros(size(P,1),dimension);
+H = zeros(size(P));
 H(:,1) = x_H;
 H(:,2) = y_H;
 H(:,3) = z_H;
@@ -312,7 +267,7 @@ H(:,3) = z_H;
 
 % Distance
 d2H = sqrt(sum((P-H).^2,2));
-H = H(:,1:dimension);
+H = H(:,1:size(P,2));
 
 
 end % point_to_line_distance       
