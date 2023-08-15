@@ -70,7 +70,7 @@ function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 % [R,I,r] = triangle_incircle(A,B,C);
 
 
-%% Input parsing
+% Input parsing
 assert(nargin > 2, 'Not enought input arguments. Three points required to define one triangle.');
 assert(nargin < 6, 'Too many input arguments.');
 
@@ -105,7 +105,7 @@ A_midangle_vect = 0.5*(AB+AC);
 B_midangle_vect = 0.5*(BC-AB);
 
 % Circle centre I computation
-I = lines_intersection(A,A_midangle_vect,B,B_midangle_vect,true)';
+I = lines_intersection(A,A_midangle_vect,B,B_midangle_vect)';
 
 % Circle radius r computation
 r = point_to_line_distance(I,AB',A');
@@ -162,73 +162,53 @@ end % triangle_incircle
 
 
 %% lines_intersection subfunction
-function [I, rc] = lines_intersection(M1, u1, M2, u2, verbose)
+function [I, rc] = lines_intersection(M1, u1, M2, u2)
 %
-% Author & support : nicolas.douillet (at) free.fr, 2019-2022.
+% Author & support : nicolas.douillet (at) free.fr, 2019-2023.
 
 
-u1 = u1/norm(u1);
-u2 = u2/norm(u2);
+precision = 1e3*eps;
 v = cross(u1,u2);
 diff_pts = M2-M1;
-nM1M2 = diff_pts/norm(diff_pts);
-
+catdim = find(size(M1)==1);
+n = numel(M1);
 
 % Segment cases
-if norm(v) < 1e3*eps
+if norm(v) < precision
     
-    if norm(cross(u1,nM1M2)) < 1e3*eps && norm(cross(u2,nM1M2)) < 1e3*eps
+    if norm(cross(u1,diff_pts)) < precision && norm(cross(u2,diff_pts)) < precision
         
         I = M1;
-        rc = 2;
-        
-        if verbose
-            disp('L1 = L2 : lines 1 and 2 are actually a same one. ');
-        end
+        rc = 2;        
         
     else
         
         I = [];
-        rc = 0;
-        
-        if verbose
-            disp('L1 // L2 : lines 1 and 2 are parallel in the 3D space and have no intersection.');
-        end
+        rc = 0;        
         
     end
     
 else
     
     d = [-v(1) v(2) -v(3)];
+    f = find(abs(d) > precision,1);
     
-    f = find(abs(d) > 1e3*eps);
-    if f; f = f(1,1); end
-    
-    d_pts = diff_pts(setdiff(1:3,f));
-    dt = det(cat(2,d_pts,-u2(setdiff(1:3,f))));
-    du = det(cat(2,u1(setdiff(1:3,f)),d_pts));
+    d_pts = diff_pts(setdiff(1:n,f));    
+    dt = det(cat(catdim,d_pts,-u2(setdiff(1:n,f))));
+    du = det(cat(catdim,u1(setdiff(1:n,f)),d_pts));
     
     t = dt/d(f);
     u = du/d(f);
-            
-    if abs(M1(f)+u1(f)*t-M2(f)-u2(f)*u) < 1e3*eps(min(abs(M1(f)+u1(f)*t),abs(M2(f)+u2(f)*u)))
+    
+    if abs(M1+u1*t-M2-u2*u) < precision
         
-        I = zeros(size(M1));
-        
-        I(1) = M1(1)+u1(1)*t;
-        I(2) = M1(2)+u1(2)*t;
-        I(3) = M1(3)+u1(3)*t;
-        
+        I = M1 + u1*t;        
         rc = 1;
-                
+        
     else
         
         I = [];
         rc = 0;
-        
-        if verbose
-            disp('Lines 1 and 2 have no intersection.');
-        end
         
     end
     
