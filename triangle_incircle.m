@@ -1,7 +1,7 @@
 function [R, I, r] = triangle_incircle(A, B, C, nb_samples, option_display)
 %% triangle_incircle : function to compute and display the incircle of one given triangle
 %
-% Author & support : nicolas.douillet (at) free.fr, 2022-2023.
+% Author : nicolas.douillet (at) free.fr, 2022-2024.
 %
 % Syntax
 %
@@ -246,7 +246,7 @@ H(:,3) = z_H;
 
 
 % Distance
-d2H = sqrt(sum((P-H).^2,2));
+d2H = vecnorm((P-H)',2)';
 H = H(:,1:size(P,2));
 
 
